@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
+import { Platform, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -21,13 +22,40 @@ SplashScreen.preventAutoHideAsync();
 const queryClient = new QueryClient();
 
 function RootLayoutNav() {
-  return (
+  const nav = (
     <Stack screenOptions={{ headerBackTitle: "" }}>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
     </Stack>
   );
+
+  // On web, center the app in a mobile-width container so it doesn't stretch
+  if (Platform.OS === "web") {
+    return (
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          backgroundColor: "#E8F0EE",
+        }}
+      >
+        <View
+          style={{
+            width: "100%",
+            maxWidth: 480,
+            flex: 1,
+            backgroundColor: "#FFFFFF",
+            // Cast to avoid web-only property types
+            ...(({ overflow: "hidden", boxShadow: "0 0 40px rgba(0,0,0,0.15)" } as any)),
+          }}
+        >
+          {nav}
+        </View>
+      </View>
+    );
+  }
+  return nav;
 }
 
 export default function RootLayout() {

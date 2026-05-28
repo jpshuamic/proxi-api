@@ -1,12 +1,14 @@
 import { Feather } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   FlatList, Platform, Pressable, RefreshControl,
-  ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View,
+  ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, useWindowDimensions,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LISTINGS, TASKS, type Listing, type Task } from "@/constants/data";
+import { NOTIFICATIONS } from "@/constants/notifications";
 import { useColors } from "@/hooks/useColors";
 
 const CATEGORIES = ["All", "Goods", "Vehicles", "Services", "Tasks", "Wholesale"];
@@ -26,15 +28,15 @@ const sb = StyleSheet.create({
   text: { fontSize: 11, fontFamily: "Inter_600SemiBold" },
 });
 
-function ListingCard({ item, onPress }: { item: Listing; onPress: () => void }) {
+function ListingCard({ item, onPress, cardWidth }: { item: Listing; onPress: () => void; cardWidth: number }) {
   const colors = useColors();
   return (
     <Pressable
       onPress={onPress}
-      style={({ pressed }) => [lc.card, { backgroundColor: colors.card, opacity: pressed ? 0.9 : 1 }]}
+      style={({ pressed }) => [lc.card, { backgroundColor: colors.card, width: cardWidth, opacity: pressed ? 0.9 : 1 }]}
     >
-      <View style={lc.imgPlaceholder}>
-        <Feather name="image" size={32} color={colors.mutedForeground} />
+      <View style={[lc.imgPlaceholder, { height: cardWidth * 0.72 }]}>
+        <Feather name="image" size={28} color={colors.mutedForeground} />
         <View style={lc.categoryBadge}>
           <Text style={lc.categoryText}>{item.category}</Text>
         </View>
@@ -55,8 +57,8 @@ function ListingCard({ item, onPress }: { item: Listing; onPress: () => void }) 
   );
 }
 const lc = StyleSheet.create({
-  card: { width: 180, borderRadius: 16, overflow: "hidden", marginRight: 12 },
-  imgPlaceholder: { height: 130, backgroundColor: "#E8F8F2", alignItems: "center", justifyContent: "center" },
+  card: { borderRadius: 16, overflow: "hidden", marginRight: 12 },
+  imgPlaceholder: { backgroundColor: "#E8F8F2", alignItems: "center", justifyContent: "center" },
   categoryBadge: { position: "absolute", top: 8, left: 8, backgroundColor: "rgba(29,158,117,0.9)", borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3 },
   categoryText: { fontSize: 10, color: "#FFFFFF", fontFamily: "Inter_600SemiBold" },
   body: { padding: 12, gap: 4 },
@@ -68,13 +70,13 @@ const lc = StyleSheet.create({
   locText: { fontSize: 11, fontFamily: "Inter_400Regular" },
 });
 
-function TaskCard({ item, onPress }: { item: Task; onPress: () => void }) {
+function TaskCard({ item, onPress, cardWidth }: { item: Task; onPress: () => void; cardWidth: number }) {
   const colors = useColors();
   const urgencyColor = item.urgency === "High" ? "#E24B4A" : item.urgency === "Medium" ? "#EF9F27" : "#1D9E75";
   return (
     <Pressable
       onPress={onPress}
-      style={({ pressed }) => [tc.card, { backgroundColor: colors.card, opacity: pressed ? 0.9 : 1 }]}
+      style={({ pressed }) => [tc.card, { backgroundColor: colors.card, width: cardWidth, opacity: pressed ? 0.9 : 1 }]}
     >
       <View style={tc.row}>
         <View style={tc.iconBox}>
@@ -98,7 +100,7 @@ function TaskCard({ item, onPress }: { item: Task; onPress: () => void }) {
   );
 }
 const tc = StyleSheet.create({
-  card: { width: 240, borderRadius: 16, padding: 16, marginRight: 12, gap: 12 },
+  card: { borderRadius: 16, padding: 16, marginRight: 12, gap: 12 },
   row: { flexDirection: "row", gap: 12, alignItems: "flex-start" },
   iconBox: { width: 42, height: 42, borderRadius: 12, backgroundColor: "#EEEDFE", alignItems: "center", justifyContent: "center" },
   title: { fontSize: 14, fontFamily: "Inter_600SemiBold", lineHeight: 19 },
@@ -142,11 +144,18 @@ export default function ExploreHome() {
   const router = useRouter();
   const colors = useColors();
   const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
   const [cat, setCat] = useState("All");
   const [search, setSearch] = useState("");
   const [refreshing, setRefreshing] = useState(false);
 
-  const topPad = Platform.OS === "web" ? 67 : insets.top;
+  const topPad = Platform.OS === "web" ? 20 : insets.top;
+
+  // Dynamic card sizing — adapts to any screen width
+  // For web it gets the container width (max 480); for native it uses device width
+  const containerWidth = Math.min(width, 480);
+  const listingCardW = Math.round(containerWidth * 0.43);
+  const taskCardW = Math.round(containerWidth * 0.62);
 
   const filteredListings = LISTINGS.filter(l =>
     (cat === "All" || l.category.toLowerCase().includes(cat.toLowerCase())) &&
@@ -160,6 +169,13 @@ export default function ExploreHome() {
 
   const uniqueSellers = LISTINGS.map(l => l.seller).filter((s, i, arr) => arr.findIndex(x => x.id === s.id) === i);
 
+  const unreadCount = NOTIFICATIONS.filter(n => !n.read).length;
+
+  const goNotifications = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    router.push("/(tabs)/explore/notifications");
+  };
+
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: colors.background }]}
@@ -170,16 +186,24 @@ export default function ExploreHome() {
       <View style={[styles.header, { paddingTop: topPad + 12 }]}>
         <View style={styles.topRow}>
           <View>
-            <Text style={[styles.greeting, { color: colors.mutedForeground }]}>Good morning</Text>
-            <View style={styles.locationRow}>
+            <Text style={[styles.greeting, { color: colors.mutedForeground }]}>Good morning 👋</Text>
+            <TouchableOpacity style={styles.locationRow}>
               <Feather name="map-pin" size={14} color={colors.primary} />
               <Text style={[styles.location, { color: colors.foreground }]}>Ikeja, Lagos</Text>
               <Feather name="chevron-down" size={14} color={colors.mutedForeground} />
-            </View>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={[styles.notifBtn, { backgroundColor: colors.card }]}>
+          <TouchableOpacity
+            style={[styles.notifBtn, { backgroundColor: colors.card }]}
+            onPress={goNotifications}
+            activeOpacity={0.75}
+          >
             <Feather name="bell" size={20} color={colors.foreground} />
-            <View style={styles.notifDot} />
+            {unreadCount > 0 && (
+              <View style={styles.notifBadge}>
+                <Text style={styles.notifBadgeText}>{unreadCount > 9 ? "9+" : unreadCount}</Text>
+              </View>
+            )}
           </TouchableOpacity>
         </View>
 
@@ -201,11 +225,7 @@ export default function ExploreHome() {
       </View>
 
       {/* Categories */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.cats}
-      >
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.cats}>
         {CATEGORIES.map(c => (
           <TouchableOpacity
             key={c}
@@ -231,10 +251,13 @@ export default function ExploreHome() {
           showsHorizontalScrollIndicator={false}
           keyExtractor={i => i.id}
           renderItem={({ item }) => (
-            <ListingCard item={item} onPress={() => router.push(`/(tabs)/explore/listing/${item.id}`)} />
+            <ListingCard
+              item={item}
+              cardWidth={listingCardW}
+              onPress={() => router.push(`/(tabs)/explore/listing/${item.id}`)}
+            />
           )}
           contentContainerStyle={{ paddingLeft: 20, paddingRight: 8 }}
-          scrollEnabled={filteredListings.length > 0}
           ListEmptyComponent={
             <Text style={[styles.empty, { color: colors.mutedForeground }]}>No listings found</Text>
           }
@@ -255,10 +278,13 @@ export default function ExploreHome() {
           showsHorizontalScrollIndicator={false}
           keyExtractor={i => i.id}
           renderItem={({ item }) => (
-            <TaskCard item={item} onPress={() => router.push(`/(tabs)/explore/task/${item.id}`)} />
+            <TaskCard
+              item={item}
+              cardWidth={taskCardW}
+              onPress={() => router.push(`/(tabs)/explore/task/${item.id}`)}
+            />
           )}
           contentContainerStyle={{ paddingLeft: 20, paddingRight: 8 }}
-          scrollEnabled
         />
       </View>
 
@@ -277,7 +303,6 @@ export default function ExploreHome() {
           keyExtractor={s => s.id}
           renderItem={({ item }) => <TraderCard seller={item} />}
           contentContainerStyle={{ paddingLeft: 20, paddingRight: 8 }}
-          scrollEnabled
         />
       </View>
 
@@ -293,8 +318,9 @@ const styles = StyleSheet.create({
   greeting: { fontSize: 13, fontFamily: "Inter_400Regular" },
   locationRow: { flexDirection: "row", alignItems: "center", gap: 4, marginTop: 2 },
   location: { fontSize: 16, fontFamily: "Inter_700Bold" },
-  notifBtn: { width: 42, height: 42, borderRadius: 12, alignItems: "center", justifyContent: "center", position: "relative" },
-  notifDot: { position: "absolute", top: 9, right: 9, width: 8, height: 8, borderRadius: 4, backgroundColor: "#E24B4A", borderWidth: 1.5, borderColor: "#FFFFFF" },
+  notifBtn: { width: 44, height: 44, borderRadius: 12, alignItems: "center", justifyContent: "center", position: "relative" },
+  notifBadge: { position: "absolute", top: 7, right: 7, minWidth: 18, height: 18, borderRadius: 9, backgroundColor: "#E24B4A", alignItems: "center", justifyContent: "center", paddingHorizontal: 4, borderWidth: 2, borderColor: "#FFFFFF" },
+  notifBadgeText: { fontSize: 9, fontFamily: "Inter_700Bold", color: "#FFFFFF" },
   searchBar: { flexDirection: "row", alignItems: "center", gap: 10, paddingHorizontal: 14, height: 48, borderRadius: 14, borderWidth: 1.5 },
   searchInput: { flex: 1, fontSize: 15, fontFamily: "Inter_400Regular" },
   cats: { paddingHorizontal: 20, paddingVertical: 12, gap: 8 },
