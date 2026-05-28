@@ -1,0 +1,286 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans, sans-serif); color: var(--color-text-primary); }
+  .sitemap { padding: 16px 0; }
+  .top-nav { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+  .tab-pill {
+    padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 500; cursor: pointer;
+    border: 1.5px solid transparent; transition: all .15s; user-select: none;
+  }
+  .tab-pill.active { color: #fff; }
+  .tab-pill[data-tab="explore"] { background: #1D9E75; border-color: #1D9E75; color: #fff; }
+  .tab-pill[data-tab="explore"].inactive { background: transparent; color: #1D9E75; }
+  .tab-pill[data-tab="post"] { background: #7F77DD; border-color: #7F77DD; color: #fff; }
+  .tab-pill[data-tab="post"].inactive { background: transparent; color: #7F77DD; }
+  .tab-pill[data-tab="inbox"] { background: #D85A30; border-color: #D85A30; color: #fff; }
+  .tab-pill[data-tab="inbox"].inactive { background: transparent; color: #D85A30; }
+  .tab-pill[data-tab="profile"] { background: #185FA5; border-color: #185FA5; color: #fff; }
+  .tab-pill[data-tab="profile"].inactive { background: transparent; color: #185FA5; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-header {
+    font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em;
+    color: var(--color-text-tertiary); margin-bottom: 10px; padding-left: 2px;
+  }
+
+  .columns { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+  .col { flex: 1; min-width: 140px; }
+
+  .col-title {
+    font-size: 12px; font-weight: 500; color: var(--color-text-secondary);
+    border-bottom: 1px solid var(--color-border-tertiary);
+    padding-bottom: 5px; margin-bottom: 8px;
+  }
+
+  .item {
+    font-size: 12px; color: var(--color-text-secondary);
+    padding: 4px 0 4px 10px; border-left: 2px solid var(--color-border-tertiary);
+    margin-bottom: 3px; cursor: pointer; transition: border-color .1s, color .1s;
+    line-height: 1.4;
+  }
+  .item:hover { color: var(--color-text-primary); border-left-color: var(--color-border-secondary); }
+
+  .badge {
+    display: inline-block; font-size: 10px; padding: 1px 5px;
+    border-radius: 4px; margin-left: 5px; vertical-align: middle; font-weight: 500;
+  }
+  .badge-green { background: #E1F5EE; color: #0F6E56; }
+  .badge-purple { background: #EEEDFE; color: #534AB7; }
+  .badge-coral { background: #FAECE7; color: #993C1D; }
+  .badge-blue { background: #E6F1FB; color: #185FA5; }
+
+  .divider { border: none; border-top: 1px solid var(--color-border-tertiary); margin: 16px 0; }
+
+  .resource-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .resource-chip {
+    font-size: 11px; padding: 4px 10px; border-radius: 12px;
+    border: 1px solid var(--color-border-tertiary); color: var(--color-text-secondary);
+    cursor: pointer; transition: background .1s;
+  }
+  .resource-chip:hover { background: var(--color-background-secondary); }
+</style>
+
+<div class="sitemap">
+  <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:12px;">Select a tab to explore its screens</div>
+  <div class="top-nav">
+    <div class="tab-pill" data-tab="explore" onclick="showTab('explore')">🔍 Explore</div>
+    <div class="tab-pill inactive" data-tab="post" onclick="showTab('post')">＋ Post</div>
+    <div class="tab-pill inactive" data-tab="inbox" onclick="showTab('inbox')">💬 Inbox</div>
+    <div class="tab-pill inactive" data-tab="profile" onclick="showTab('profile')">👤 Profile</div>
+  </div>
+
+  <!-- EXPLORE -->
+  <div class="section active" id="tab-explore">
+    <div class="section-header">Explore tab — discovery & search</div>
+    <div class="columns">
+      <div class="col">
+        <div class="col-title">Home feed</div>
+        <div class="item">Nearby listings feed</div>
+        <div class="item">Open tasks feed</div>
+        <div class="item">Featured traders</div>
+        <div class="item">Category shortcuts</div>
+        <div class="item">Promo banners <span class="badge badge-purple">Pro</span></div>
+      </div>
+      <div class="col">
+        <div class="col-title">Search & filter</div>
+        <div class="item">Search bar (global)</div>
+        <div class="item">Category filter</div>
+        <div class="item">Proximity radius slider</div>
+        <div class="item">Price range filter</div>
+        <div class="item">Trust score filter</div>
+        <div class="item">Search results page</div>
+      </div>
+      <div class="col">
+        <div class="col-title">Categories</div>
+        <div class="item">Goods & products</div>
+        <div class="item">Vehicles & motors</div>
+        <div class="item">Skilled services</div>
+        <div class="item">Gig tasks <span class="badge badge-coral">Earner</span></div>
+        <div class="item">Wholesale & bulk</div>
+        <div class="item">All categories</div>
+      </div>
+      <div class="col">
+        <div class="col-title">Listing detail</div>
+        <div class="item">Photos carousel</div>
+        <div class="item">Description & specs</div>
+        <div class="item">Seller trust card</div>
+        <div class="item">Proximity indicator</div>
+        <div class="item">Make offer / Book</div>
+        <div class="item">Report listing</div>
+        <div class="item">Similar items</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POST -->
+  <div class="section" id="tab-post">
+    <div class="section-header">Post tab — create listings & tasks</div>
+    <div class="columns">
+      <div class="col">
+        <div class="col-title">Post a listing <span class="badge badge-green">Trader</span></div>
+        <div class="item">Choose listing type</div>
+        <div class="item">Upload photos</div>
+        <div class="item">Title & description</div>
+        <div class="item">Price / negotiable toggle</div>
+        <div class="item">Category & tags</div>
+        <div class="item">Location (auto / manual)</div>
+        <div class="item">Delivery options</div>
+        <div class="item">Preview & publish</div>
+      </div>
+      <div class="col">
+        <div class="col-title">Post a service <span class="badge badge-green">Skilled</span></div>
+        <div class="item">Service category</div>
+        <div class="item">Rate & duration</div>
+        <div class="item">Portfolio photos</div>
+        <div class="item">Availability calendar</div>
+        <div class="item">Service area radius</div>
+        <div class="item">Preview & publish</div>
+      </div>
+      <div class="col">
+        <div class="col-title">Post a task <span class="badge badge-coral">Buyer</span></div>
+        <div class="item">Task title & details</div>
+        <div class="item">Budget (fixed / hourly)</div>
+        <div class="item">Location / remote toggle</div>
+        <div class="item">Deadline picker</div>
+        <div class="item">Attachments</div>
+        <div class="item">Task visibility</div>
+        <div class="item">Preview & publish</div>
+      </div>
+      <div class="col">
+        <div class="col-title">Manage listings</div>
+        <div class="item">My active listings</div>
+        <div class="item">Edit / relist</div>
+        <div class="item">Mark as sold</div>
+        <div class="item">Promoted listings <span class="badge badge-purple">Pro</span></div>
+        <div class="item">Listing analytics <span class="badge badge-purple">Pro</span></div>
+        <div class="item">Draft listings</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INBOX -->
+  <div class="section" id="tab-inbox">
+    <div class="section-header">Inbox tab — messages, offers & transactions</div>
+    <div class="columns">
+      <div class="col">
+        <div class="col-title">Messaging</div>
+        <div class="item">All conversations</div>
+        <div class="item">Chat thread</div>
+        <div class="item">Offer received/sent</div>
+        <div class="item">Media attachments</div>
+        <div class="item">Block / report user</div>
+        <div class="item">Read receipts</div>
+      </div>
+      <div class="col">
+        <div class="col-title">Offers & orders</div>
+        <div class="item">Incoming offers</div>
+        <div class="item">Accept / counter / decline</div>
+        <div class="item">Active orders</div>
+        <div class="item">Order detail & timeline</div>
+        <div class="item">Escrow status</div>
+        <div class="item">Raise dispute</div>
+      </div>
+      <div class="col">
+        <div class="col-title">Task inbox <span class="badge badge-coral">Earner</span></div>
+        <div class="item">Task applications sent</div>
+        <div class="item">Task awarded</div>
+        <div class="item">Proof of completion</div>
+        <div class="item">Payment release</div>
+        <div class="item">Task history</div>
+      </div>
+      <div class="col">
+        <div class="col-title">Notifications</div>
+        <div class="item">New message</div>
+        <div class="item">Offer update</div>
+        <div class="item">Order status change</div>
+        <div class="item">Trust score change</div>
+        <div class="item">Platform alerts</div>
+        <div class="item">Notification settings</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="section" id="tab-profile">
+    <div class="section-header">Profile tab — account, trust & settings</div>
+    <div class="columns">
+      <div class="col">
+        <div class="col-title">My profile</div>
+        <div class="item">Public profile view</div>
+        <div class="item">Edit profile</div>
+        <div class="item">Profile photo</div>
+        <div class="item">Bio & location</div>
+        <div class="item">Linked socials</div>
+        <div class="item">User type badge</div>
+      </div>
+      <div class="col">
+        <div class="col-title">Trust & verification</div>
+        <div class="item">Trust score card</div>
+        <div class="item">Phone verification</div>
+        <div class="item">ID verification</div>
+        <div class="item">Ratings & reviews</div>
+        <div class="item">Leave a review</div>
+        <div class="item">Verification history</div>
+      </div>
+      <div class="col">
+        <div class="col-title">Wallet & payments</div>
+        <div class="item">Wallet balance</div>
+        <div class="item">Fund wallet (Paystack)</div>
+        <div class="item">Withdraw earnings</div>
+        <div class="item">Escrow held</div>
+        <div class="item">Transaction history</div>
+        <div class="item">Bank account settings</div>
+      </div>
+      <div class="col">
+        <div class="col-title">Settings & account</div>
+        <div class="item">Account details</div>
+        <div class="item">Change phone / email</div>
+        <div class="item">Privacy settings</div>
+        <div class="item">Blocked users</div>
+        <div class="item">Pro subscription <span class="badge badge-purple">Pro</span></div>
+        <div class="item">Help & support</div>
+        <div class="item">Report a problem</div>
+        <div class="item">Delete account</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Onboarding & Auth -->
+  <div class="section-header">Onboarding & auth (pre-login)</div>
+  <div class="resource-row" style="margin-bottom:16px;">
+    <div class="resource-chip">Splash screen</div>
+    <div class="resource-chip">Sign up (phone)</div>
+    <div class="resource-chip">OTP verification</div>
+    <div class="resource-chip">User type selection</div>
+    <div class="resource-chip">Location permission</div>
+    <div class="resource-chip">Profile setup</div>
+    <div class="resource-chip">Sign in</div>
+    <div class="resource-chip">Forgot PIN</div>
+  </div>
+
+  <div class="section-header">Platform flows (cross-tab)</div>
+  <div class="resource-row">
+    <div class="resource-chip">Dispute & resolution centre</div>
+    <div class="resource-chip">Safety & community guidelines</div>
+    <div class="resource-chip">Referral programme</div>
+    <div class="resource-chip">Pro upgrade flow</div>
+    <div class="resource-chip">About Proxi</div>
+    <div class="resource-chip">FAQ</div>
+  </div>
+</div>
+
+<script>
+function showTab(tab) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-pill').forEach(p => {
+    if (p.dataset.tab === tab) p.classList.remove('inactive');
+    else p.classList.add('inactive');
+  });
+  document.getElementById('tab-' + tab).classList.add('active');
+}
+</script>

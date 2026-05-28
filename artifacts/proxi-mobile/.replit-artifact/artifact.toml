@@ -1,0 +1,27 @@
+kind = "mobile"
+previewPath = "/proxi-mobile/"
+title = "Proxi Mobile"
+version = "1.0.0"
+id = "artifacts/proxi-mobile"
+router = "expo-domain"
+
+[[integratedSkills]]
+name = "expo"
+version = "1.0.0"
+
+[[services]]
+ensurePreviewReachable = "/status"
+name = "expo"
+paths = [ "/proxi-mobile/" ]
+localPort = 19975
+
+[services.development]
+run = "pnpm --filter @workspace/proxi-mobile run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/proxi-mobile", "run", "build" ]
+run = [ "pnpm", "--filter", "@workspace/proxi-mobile", "run", "serve" ]
+
+[services.env]
+PORT = "19975"
+BASE_PATH = "/proxi-mobile/"

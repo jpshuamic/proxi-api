@@ -1,0 +1,8 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "CtDyrBoDO3NufjI81hf-3"
+uri = "file://artifacts/proxi-mobile/assets/images/icon.png"
+type = "image"
+title = "proxi app icon"

@@ -1,0 +1,501 @@
+# Proxi — Full Replit Agent Prompt
+
+Paste everything below this line into Replit Agent.
+
+---
+
+Build a React Native + Expo mobile app called **Proxi** — a hyper-local marketplace for Nigeria's informal economy connecting Traders, Skilled Workers, and Earners (gig workers).
+
+---
+
+## TECH STACK
+- React Native with Expo (managed workflow)
+- React Navigation v6: Bottom Tab Navigator + Stack Navigator
+- NativeWind (Tailwind for React Native) or StyleSheet
+- Expo Location, Expo Image Picker, Expo Notifications
+- Dummy/placeholder data only — no backend or API calls yet
+
+---
+
+## DESIGN SYSTEM
+- Primary green: #1D9E75
+- Purple accent: #7F77DD
+- Coral accent: #D85A30
+- Blue accent: #185FA5
+- Background: #FFFFFF
+- Card background: #F5F5F5
+- Text primary: #1A1A1A
+- Text secondary: #6B6B6B
+- Border: #E0E0E0
+- Trust score badge: green (#1D9E75) for 70–100, amber (#EF9F27) for 40–69, red (#E24B4A) for 0–39
+- Font: System default (San Francisco on iOS, Roboto on Android)
+- All screens have a header with title and back arrow where applicable
+- Bottom tab bar with icons for: Explore, Post, Inbox, Profile
+
+---
+
+## NAVIGATION STRUCTURE
+
+### Pre-login Stack (no tabs visible):
+SplashScreen → SignUpScreen → OTPScreen → UserTypeScreen → LocationPermissionScreen → ProfileSetupScreen → (enters main app)
+
+### Main App — Bottom Tab Navigator (4 tabs):
+1. Explore Tab (Stack)
+2. Post Tab (Stack)
+3. Inbox Tab (Stack)
+4. Profile Tab (Stack)
+
+---
+
+## ALL SCREENS — BUILD SHELLS WITH REALISTIC DUMMY DATA
+
+---
+
+### ONBOARDING STACK
+
+**SplashScreen**
+- Proxi logo centered
+- Tagline: "Your neighbourhood. Your market."
+- Auto-navigates to SignUpScreen after 2 seconds
+
+**SignUpScreen**
+- Header: "Welcome to Proxi"
+- Phone number input field with Nigeria +234 prefix
+- "Continue" button (navigates to OTPScreen)
+- "Already have an account? Sign in" link
+
+**SignInScreen**
+- Header: "Sign in"
+- Phone number input
+- PIN input (4-digit)
+- "Sign in" button
+- "Forgot PIN?" link
+
+**OTPScreen**
+- Header: "Verify your number"
+- Subtitle: "We sent a 6-digit code to +234 XXX XXX XXXX"
+- 6 individual digit input boxes
+- Countdown timer "Resend in 0:45"
+- "Resend OTP" button (disabled until timer ends)
+
+**UserTypeScreen**
+- Header: "What best describes you?"
+- 3 large selectable cards:
+  - Trader — "Sell goods, products or vehicles"
+  - Skilled Worker — "Offer professional services"
+  - Earner — "Complete tasks and gigs for income"
+- Each card has an icon, title, and description
+- "Continue" button
+
+**LocationPermissionScreen**
+- Header: "Enable your location"
+- Illustration placeholder (map pin graphic)
+- Body: "Proxi connects you to buyers and sellers within your neighbourhood. Your exact location is never shared publicly."
+- "Allow location" button
+- "Set manually" link
+
+**ProfileSetupScreen**
+- Header: "Set up your profile"
+- Avatar upload (circle placeholder + camera icon)
+- First name input
+- Last name input
+- Optional: short bio input
+- "Complete setup" button
+
+---
+
+### EXPLORE TAB STACK
+
+**HomeScreen** (Explore tab root)
+- Search bar at top ("Search products, services, tasks...")
+- Location chip: "📍 Ikeja, Lagos · 5km" with dropdown arrow
+- Horizontal scroll of category chips: All · Goods · Vehicles · Services · Tasks · Wholesale
+- Section: "Near you" — horizontal scroll of ListingCards
+- Section: "Open tasks" — horizontal scroll of TaskCards
+- Section: "Top rated traders" — horizontal scroll of TraderCards
+- Pull to refresh
+
+**SearchScreen**
+- Full-screen search with keyboard open
+- Recent searches list
+- Trending searches list
+- On type: shows live results
+
+**SearchResultsScreen**
+- Header with search term and result count
+- Filter bar: Category | Distance | Price | Trust Score
+- Vertical list of ListingCards
+- "No results" empty state
+
+**FilterScreen** (modal sheet)
+- Category multi-select list
+- Proximity radius slider (1km – 50km)
+- Price range: min/max inputs
+- Trust score minimum: slider (0–100)
+- "Apply filters" button
+- "Reset" link
+
+**CategoryBrowseScreen**
+- Header: category name
+- Sub-category horizontal chips
+- Grid of ListingCards
+
+**ListingDetailScreen** (Product)
+- Photo carousel (swipeable, with dot indicators)
+- Title, price (bold), "Negotiable" badge if applicable
+- Location chip with distance: "📍 2.3km away"
+- Seller trust card:
+  - Avatar, name, trust score badge (e.g. 84/100)
+  - "Verified ID" · "Phone verified" badges
+  - "View profile" link
+- Description (expandable)
+- Tags/chips
+- Delivery options: Pickup · Delivery · Both
+- Bottom bar: "Message Seller" button + "Make Offer" button
+
+**ServiceDetailScreen** (Skilled Worker listing)
+- Cover photo / portfolio photo carousel
+- Service title, rate (e.g. "₦5,000/hr")
+- Provider trust card (same structure as seller trust card)
+- "Available" / "Busy" status badge
+- About section
+- Service area: "Serves within 10km of Surulere"
+- Portfolio grid (3 photo thumbnails)
+- Bottom bar: "Book Service" button + "Message" button
+
+**TaskDetailScreen** (Gig task)
+- Task title
+- Budget badge: "₦3,500 fixed" or "₦800/hr"
+- Deadline chip: "Due in 2 days"
+- Posted by: mini user card with trust score
+- Full task description
+- Attachments section (placeholder)
+- Location: Remote / On-site chip
+- Bottom bar: "Apply for task" button
+
+**MakeOfferScreen** (modal)
+- Header: "Make an offer"
+- Listed price shown
+- Offer amount input
+- Optional message input
+- "Send offer" button
+
+**BookServiceScreen** (modal)
+- Header: "Book [Service Name]"
+- Date picker
+- Time picker
+- Location input (your address)
+- Notes to provider input
+- Estimated total
+- "Confirm booking" button
+
+**ApplyForTaskScreen** (modal)
+- Header: "Apply for task"
+- Your proposed rate input (if hourly task)
+- Cover message input
+- Estimated completion time input
+- "Submit application" button
+
+**NearbyMapScreen**
+- Full-screen map view (placeholder map image or MapView)
+- Listing pins on map
+- Tap pin → mini listing card popup
+- List/Map toggle button
+
+---
+
+### POST TAB STACK
+
+**PostTypeScreen** (Post tab root)
+- Header: "What do you want to post?"
+- 3 large cards:
+  - "Product or Goods" → PostProductScreen
+  - "Skill or Service" → PostServiceScreen
+  - "Task or Gig" → PostTaskScreen
+
+**PostProductScreen**
+- Progress bar (Step 1 of 4)
+- Step 1 — Photos: upload up to 6 photos, grid preview
+- Step 2 — Details: Title input, Description input, Category picker, Condition picker (New / Used / Refurbished)
+- Step 3 — Pricing: Price input, Negotiable toggle, Delivery options (Pickup / Delivery / Both)
+- Step 4 — Location & Review: Location (auto-filled), Preview card, "Publish listing" button
+
+**PostServiceScreen**
+- Progress bar (Step 1 of 3)
+- Step 1 — Service info: Category picker, Service title, Description, Rate input, Rate type (Per hour / Per job / Per day)
+- Step 2 — Availability & area: Availability days (multi-select chips: Mon–Sun), Service radius slider, Portfolio photos upload
+- Step 3 — Review & publish: Preview card, "Publish service" button
+
+**PostTaskScreen**
+- Progress bar (Step 1 of 3)
+- Step 1 — Task details: Title, Full description, Category, Attachments upload
+- Step 2 — Budget & timeline: Budget type (Fixed / Hourly), Budget amount, Deadline date picker, Location type (Remote / On-site / Both)
+- Step 3 — Review & publish: Preview card, "Post task" button
+
+**MyListingsScreen**
+- Tabs: Active | Drafts | Sold/Closed
+- List of listing rows with edit, relist, mark-as-sold actions
+- "Promoted" badge on boosted listings
+
+**EditListingScreen**
+- Same form as PostProductScreen/PostServiceScreen but pre-filled
+
+**PromoteListingScreen**
+- Header: "Boost this listing"
+- Duration options: 3 days · 7 days · 14 days (with prices)
+- Estimated reach stat
+- "Pay & promote" button (Paystack — UI only, no integration yet)
+
+**ListingAnalyticsScreen** (Pro only)
+- Views count, Offers received, Messages count
+- Simple bar chart placeholder
+- "Upgrade to Pro" banner if not subscribed
+
+---
+
+### INBOX TAB STACK
+
+**InboxScreen** (Inbox tab root)
+- Tabs: Messages | Orders | Tasks
+- Messages tab: list of ChatRow items (avatar, name, last message, time, unread badge)
+- Orders tab: list of OrderRow items (listing thumbnail, status chip, buyer/seller name)
+- Tasks tab: list of TaskApplicationRow items (task title, status, budget)
+
+**ChatScreen**
+- Header: contact name + trust score badge + "View profile" button
+- Message bubbles (sent = green right, received = gray left)
+- Offer card bubble (special card showing offer amount with Accept/Counter/Decline buttons)
+- Media attachment button
+- Text input + send button
+
+**OfferDetailScreen** (modal)
+- Listing thumbnail and title
+- Offer amount vs listed price
+- Offer message
+- "Accept offer" button
+- "Counter offer" button
+- "Decline" button
+
+**OrderDetailScreen**
+- Header: "Order #PRX-00124"
+- Status timeline: Offer accepted → Payment held in escrow → Item delivered → Funds released
+- Active step highlighted in green
+- Listing card summary
+- Buyer info card / Seller info card
+- Escrow amount chip: "₦45,000 held securely"
+- "Mark as delivered" button (seller) / "Confirm receipt" button (buyer)
+- "Raise a dispute" button (red, at bottom)
+
+**DisputeScreen**
+- Header: "Raise a dispute"
+- Order summary card
+- Reason picker (Item not as described / Not delivered / Fraud / Other)
+- Description input
+- Evidence upload (photos)
+- "Submit dispute" button
+- Info text: "Our team reviews disputes within 24 hours"
+
+**TaskApplicationsScreen** (for task posters)
+- Header: "[Task Title] — Applications"
+- List of applicant cards: avatar, name, trust score, proposed rate, message preview
+- "Award task" button per applicant
+
+**TaskProgressScreen** (for earners)
+- Header: task title
+- Status: Applied / Awarded / In Progress / Submitted / Paid
+- Task details recap
+- "Submit proof of completion" button
+- Photo/file upload for proof
+- Payment status: "₦3,500 will be released on approval"
+
+**ProofSubmissionScreen**
+- Header: "Submit completion proof"
+- Description of work done (input)
+- Photo uploads (up to 5)
+- "Submit for review" button
+
+**NotificationsScreen**
+- List of notification rows grouped by Today / Yesterday / Earlier
+- Types: new message, offer received, offer accepted, order update, trust score change, task awarded, payment received
+- Mark all as read button
+
+---
+
+### PROFILE TAB STACK
+
+**ProfileScreen** (Profile tab root)
+- Cover area: avatar (large), name, user type badge (Trader / Skilled / Earner)
+- Trust score ring: large circular score display (e.g. 78/100) in green
+- Verification badges row: ✓ Phone · ✓ ID · ✓ Address
+- Stats row: Listings | Completed orders | Reviews
+- "Edit profile" button
+- Recent reviews section (2–3 review cards)
+- "View all reviews" link
+- My listings preview (3 listing thumbnails)
+
+**PublicProfileScreen** (viewing another user)
+- Same layout as ProfileScreen but with "Message" and "Follow" buttons instead of "Edit"
+- All their active listings
+
+**EditProfileScreen**
+- Avatar upload
+- First name, Last name inputs
+- Bio input (max 150 chars with counter)
+- Location input
+- Linked phone (read-only, shows verified)
+- "Save changes" button
+
+**TrustScoreScreen**
+- Header: "Your trust score"
+- Large score display with ring (e.g. 78/100)
+- Score breakdown list:
+  - Phone verified: +20 ✓
+  - ID verified: +25 (tap to verify)
+  - First transaction completed: +15 ✓
+  - 5-star review received: +10 ✓
+  - Profile complete: +8 ✓
+- "How is my score calculated?" expandable section
+- "Verify ID" button (if not verified)
+
+**IDVerificationScreen**
+- Header: "Verify your identity"
+- Step indicator (1 of 3)
+- Step 1: Select ID type (NIN / Driver's Licence / Voter's Card / International Passport)
+- Step 2: Upload front + back photo of ID
+- Step 3: Selfie capture prompt
+- "Submit for review" button
+- Processing time note: "Usually verified within 2 hours"
+
+**ReviewsScreen**
+- Tabs: Received | Given
+- Average star rating display
+- List of ReviewCards: avatar, name, stars, date, comment text
+- Empty state if no reviews
+
+**LeaveReviewScreen**
+- Header: "Review [User Name]"
+- Order/task reference card
+- Star rating selector (1–5)
+- Written review input
+- "Submit review" button
+
+**WalletScreen**
+- Balance card: "Available balance — ₦12,400"
+- Escrow held: "₦5,000 in escrow"
+- Action buttons: "Add money" · "Withdraw"
+- Transaction history list: date, description, amount (green = credit, red = debit)
+
+**AddMoneyScreen**
+- Header: "Add money"
+- Amount input with preset chips: ₦1,000 · ₦5,000 · ₦10,000 · ₦20,000
+- Payment method: Card (Paystack — UI only) / Bank transfer
+- "Proceed to payment" button
+
+**WithdrawScreen**
+- Header: "Withdraw funds"
+- Available balance shown
+- Amount input
+- Bank account selector (pre-saved)
+- "Add bank account" option
+- "Withdraw" button
+- Processing time note: "1–2 business days"
+
+**BankAccountScreen**
+- Header: "Bank accounts"
+- List of saved accounts
+- "Add new account" button → form: Bank picker, Account number, Account name (auto-resolved)
+
+**SettingsScreen**
+- Account section: Change phone number · Change PIN · Email address
+- Privacy section: Location sharing · Profile visibility · Who can message me
+- Notifications section: Push notifications toggle · Order updates · Messages · Promotions
+- Blocked users link
+- Pro subscription card (upgrade CTA or current plan details)
+- Support section: Help centre · Report a problem · Contact support
+- About section: About Proxi · Terms of service · Privacy policy · App version
+- "Sign out" button (red text)
+- "Delete account" link (gray, small)
+
+**ProSubscriptionScreen**
+- Header: "Proxi Pro"
+- Feature comparison: Free vs Pro (table)
+  - Pro features: promoted listings, listing analytics, priority support, unlimited listings, verified Pro badge
+- Pricing: Monthly ₦2,500 / Yearly ₦20,000
+- "Subscribe monthly" and "Subscribe yearly" buttons
+- "Restore purchase" link
+
+**HelpScreen**
+- Search bar: "Search help articles..."
+- FAQ categories: Buying · Selling · Payments · Trust & Safety · Account
+- Expandable FAQ items
+- "Contact support" button at bottom
+- "Chat with us" button
+
+**ReportProblemScreen**
+- Header: "Report a problem"
+- Category picker
+- Description input
+- Optional screenshot upload
+- "Submit report" button
+
+**BlockedUsersScreen**
+- Header: "Blocked users"
+- List of blocked user rows with "Unblock" button
+- Empty state if none
+
+**AboutProxiScreen**
+- Logo + version
+- Short mission statement
+- Links: Terms of service · Privacy policy · Cookie policy
+- Social links
+
+---
+
+## SHARED COMPONENTS (reuse across screens)
+
+**ListingCard** — thumbnail image, title, price, distance chip, trust score mini badge
+**TaskCard** — task title, budget badge, deadline chip, applicant count
+**TraderCard** — avatar, name, trust score badge, listing count
+**ReviewCard** — avatar, name, star rating, date, comment
+**TrustBadge** — colored badge showing score/100
+**VerifiedBadge** — small green chip "✓ Verified"
+**EscrowStatusBar** — step timeline for order progress
+**OrderRow** — listing thumb, status chip, counterparty name, amount
+**ChatRow** — avatar, name, last message, timestamp, unread dot
+**EmptyState** — icon + title + subtitle for empty lists
+**ProBanner** — "Upgrade to Pro" CTA card
+
+---
+
+## DUMMY DATA TO USE
+
+Users:
+- Emeka Okafor, Trader, Trust score: 84, Lagos Island, 23 listings
+- Blessing Adeyemi, Skilled Worker (electrician), Trust score: 91, Surulere
+- Chukwudi Nwosu, Earner, Trust score: 67, Ikeja
+
+Sample listings:
+- "2019 Toyota Camry — ₦7,200,000" (vehicle)
+- "iPhone 13 Pro Max — ₦380,000" (electronics)
+- "Wholesale ankara fabric (10 yards) — ₦15,000" (goods)
+
+Sample services:
+- "Electrical installations & repairs — ₦5,000/hr"
+- "Hair braiding & styling — ₦3,500/session"
+
+Sample tasks:
+- "Deliver 3 cartons from Mile 12 to VI — ₦4,500 fixed"
+- "Paint 2 rooms in my flat — ₦25,000 fixed"
+
+---
+
+## IMPORTANT NOTES
+
+1. Build ALL screens as shells with realistic dummy data — no real backend or API calls
+2. All navigation between screens must be fully wired
+3. No authentication logic needed — just navigate through the flows
+4. All forms should have visible inputs and buttons but do not need to submit anywhere
+5. Mark any Pro-only screens with a "Pro" badge and show an upgrade prompt
+6. Use Nigerian Naira (₦) for all currency
+7. Use Nigerian names and Lagos locations for all dummy data
+8. Escrow and payment screens are UI only — no Paystack integration yet
