@@ -15,8 +15,9 @@ export default function ExploreLayout() {
     >
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="notifications" options={{ title: "Notifications" }} />
-      <Stack.Screen name="listing/[id]" options={{ title: "Listing" }} />
-      <Stack.Screen name="task/[id]" options={{ title: "Task" }} />
+      {/* listing and task use their own custom headers — no system header */}
+      <Stack.Screen name="listing/[id]" options={{ headerShown: false }} />
+      <Stack.Screen name="task/[id]" options={{ headerShown: false }} />
     </Stack>
   );
 }

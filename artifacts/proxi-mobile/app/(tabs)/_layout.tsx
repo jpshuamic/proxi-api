@@ -6,6 +6,31 @@ import { Platform, StyleSheet, View, useColorScheme } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useColors } from "@/hooks/useColors";
 
+function TabIcon({
+  name,
+  focusedName,
+  color,
+  focused,
+  primaryColor,
+}: {
+  name: keyof typeof Feather.glyphMap;
+  focusedName?: keyof typeof Feather.glyphMap;
+  color: string;
+  focused: boolean;
+  primaryColor: string;
+}) {
+  return (
+    <View
+      style={[
+        styles.iconWrap,
+        focused && { backgroundColor: primaryColor + "18" },
+      ]}
+    >
+      <Feather name={focused && focusedName ? focusedName : name} size={22} color={color} />
+    </View>
+  );
+}
+
 export default function TabLayout() {
   const colors = useColors();
   const colorScheme = useColorScheme();
@@ -14,7 +39,7 @@ export default function TabLayout() {
   const isWeb = Platform.OS === "web";
   const safeAreaInsets = useSafeAreaInsets();
 
-  const tabBarHeight = isWeb ? 84 : 50 + safeAreaInsets.bottom;
+  const tabBarHeight = isWeb ? 84 : 58 + safeAreaInsets.bottom;
 
   return (
     <Tabs
@@ -31,7 +56,7 @@ export default function TabLayout() {
           shadowOpacity: 0,
           height: tabBarHeight,
           paddingBottom: isWeb ? 16 : safeAreaInsets.bottom,
-          paddingTop: 8,
+          paddingTop: 6,
         },
         tabBarBackground: () =>
           isIOS ? (
@@ -45,39 +70,61 @@ export default function TabLayout() {
               style={[StyleSheet.absoluteFill, { backgroundColor: colors.background }]}
             />
           ),
-        tabBarLabelStyle: { fontFamily: "Inter_500Medium", fontSize: 11, marginTop: 2 },
+        tabBarLabelStyle: {
+          fontFamily: "Inter_600SemiBold",
+          fontSize: 10,
+          marginTop: 0,
+        },
       }}
     >
       <Tabs.Screen
         name="explore"
         options={{
           title: "Explore",
-          tabBarIcon: ({ color }) => <Feather name="compass" size={22} color={color} />,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon name="compass" color={color} focused={focused} primaryColor={colors.primary} />
+          ),
         }}
       />
       <Tabs.Screen
         name="post"
         options={{
           title: "Post",
-          tabBarIcon: ({ color }) => <Feather name="plus-circle" size={22} color={color} />,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon name="plus-circle" focusedName="plus-circle" color={color} focused={focused} primaryColor={colors.primary} />
+          ),
         }}
       />
       <Tabs.Screen
         name="inbox"
         options={{
           title: "Inbox",
-          tabBarIcon: ({ color }) => <Feather name="message-circle" size={22} color={color} />,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon name="message-circle" color={color} focused={focused} primaryColor={colors.primary} />
+          ),
           tabBarBadge: 3,
-          tabBarBadgeStyle: { backgroundColor: "#E24B4A", fontSize: 10 },
+          tabBarBadgeStyle: { backgroundColor: "#E24B4A", fontSize: 9, minWidth: 16, height: 16, lineHeight: 16 },
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: "Profile",
-          tabBarIcon: ({ color }) => <Feather name="user" size={22} color={color} />,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon name="user" color={color} focused={focused} primaryColor={colors.primary} />
+          ),
         }}
       />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  iconWrap: {
+    width: 44,
+    height: 32,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});

@@ -1,0 +1,120 @@
+1. Bottom Navigation – Critical UI flaw
+Flaws
+· Overlaps key buttons – On listing pages, the bottom nav covers the lower part of the description and the seller's action buttons (e.g., Phone button is partially hidden or hard to tap).
+· No safe area padding – On modern phones, nav bars need extra bottom margin (especially on iPhones with home indicators).
+· Inactive tabs not clearly differentiated – "Explore / Post / Inbox / Profile / Index" – current state (which screen am I on?) is unclear.
+Enhancements
+· Add 80px bottom safe area on listing screens so content stops before nav starts.
+· Move Phone button higher in the seller card, not at the very bottom.
+· Highlight active tab with color + icon fill change.
+· Consider collapsible bottom nav when scrolling down on listing pages.
+---
+2. Listing screens (Fan, Car, etc.)
+Flaws
+· "Phone" button placement – sits dangerously close to the bottom nav. On some screens, it's partially behind the nav.
+· Seller rating is small – 61/100 lacks context. What does 61 mean? Good? Bad?
+· No "Report" or "Safety tip" – users can't flag suspicious listings easily.
+· Missing "Share" button – key for marketplace virality.
+Enhancements
+· Add a floating action button (FAB) for "Contact seller" above the bottom nav.
+· Show rating as badge + label e.g., 61/100 – Average.
+· Add "🚩 Report listing" in 3-dot menu.
+· Add "Share ↗" next to listing date.
+---
+3. Task detail screen (Mama Put restaurant)
+Flaws
+· No way to ask a question publicly – only apply or message privately.
+· No budget breakdown – ₦80,000 fixed but no milestone suggestion.
+· "Remote" tag conflicts with "Surulere, Lagos" – users may be confused.
+· No applicant count – how many others applied?
+Enhancements
+· Add "Ask a question" button (visible to all).
+· Suggest milestones e.g., ₦40k design + ₦40k delivery.
+· Clarify: Remote possible, but client is in Surulere.
+· Show "X people applied" to create urgency.
+---
+4. Chat screen (Ada Nwachukwu)
+Flaws
+· No typing indicator – feels dead.
+· No read receipts – can't tell if she saw your message.
+· No attachment button – can't send images, files, or portfolio PDF directly.
+· No profile preview – tapping Ada's name does nothing (assumed).
+Enhancements
+· Add three dots for attachment menu.
+· Show "Seen 9:21 AM" or double-check marks.
+· Typing animation: "Ada is typing..."
+· Make name tappable → view her full profile and rating.
+---
+5. Post Product flow (IMG_3561)
+Flaws
+· No placeholder hints – user doesn't know image ratio (1:1? 4:3?).
+· No "Add from URL" option – some sellers have existing image links.
+· No image reorder after upload – cover photo is critical but can't rearrange.
+Enhancements
+· Show dotted frame with 1:1 ratio guide.
+· Add "Paste image URL" option.
+· After adding photos, show drag-to-reorder handles.
+---
+6. Search / Home screen
+Flaws
+· Search bar placeholder is too generic – "Search products, services, tasks..." → no examples.
+· "Near you" section – shows only 3 items even though screen has space.
+· "Samson 128G for ₦18" – this looks suspicious. ₦18 for 128GB? Probably a typo or scam. No price validation.
+Enhancements
+· Suggest searches: "standing fan", "website design", "Honda CRV".
+· Add horizontal scroll for "Near you" with 6+ items.
+· Add price anomaly detection – flag impossibly low prices like ₦18 for 128GB.
+---
+Summary of top 3 fixes
+1. Bottom nav overlap – increase bottom padding on all scrollable screens.
+2. Phone button hidden – move seller actions above nav bar.
+3. Price sanity check – prevent ₦18 listings for high-value items.
+
+
+
+
+
+
+
+
+
+
+
+navigation redundancy flaw.
+Looking back at your screens, I can see the issue:
+Example: On the Listing screen (IMG_3562 / IMG_3563) and Task detail screen (IMG_3564), you likely have:
+· A back arrow from the native iOS/Android navigation bar
+· Another back arrow inside the app's custom header
+So users see two ways to go back — confusing and space-wasting.
+---
+Why this happens
+Your app is using:
+1. System navigation (iOS swipe back + native back button)
+2. Custom in-app back button (design system leftover)
+They're stacked on top of each other.
+---
+Fixes
+Option 1: Remove custom back button (recommended)
+· Keep only system back (iOS uses edge swipe, Android uses system back button)
+· Saves screen space
+· More predictable for users
+Option 2: Remove system back arrow
+· Hide native navigation bar
+· Keep only custom in-app back button
+· Works if you want consistent branding across platforms
+Option 3: Keep both but offset them
+· Not recommended — still confuses users
+---
+Additional related flaw
+On screens with double back arrows, the header becomes too crowded — especially on the Task screen where you also have:
+· Task title
+· Priority badge
+· Price
+· Share/More options
+That's 5+ UI elements fighting for top space.
+---
+My recommendation
+· Remove custom back arrow from all detail screens (Listing, Task, Chat)
+· Let system handle navigation
+· Use that freed space to show seller/tasker avatar + name in header instead
+Want me to sketch how the Task detail screen would look without the double back arrow and with a cleaner top bar?
